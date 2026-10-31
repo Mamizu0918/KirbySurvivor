@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kirby Survivor - Ultimate Edition v8.2</title>
+    <title>Kirby Survivor - Ultimate Edition v8.2 (Pixel Art Version)</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.0/dist/phaser.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,45 +32,36 @@
             constructor() { super({ key: 'StartScene' }); }
 
             preload() {
+                // ==========================================
+                // 載入外部像素圖檔 (將 kirby_idle.png 放在 assets 資料夾中)
+                // ==========================================
+                this.load.image('kirby_pixel', 'assets/kirby_idle.png');
+
+                // 原本的其他圖形生成保持不變
                 let g = this.make.graphics({x:0, y:0, add:false});
-                g.fillStyle(0xff88bb, 1); g.fillCircle(16, 16, 16); 
-                g.fillStyle(0xff0044, 1); g.fillEllipse(10, 28, 12, 8); g.fillEllipse(22, 28, 12, 8); 
-                g.fillStyle(0xffffff, 1); g.fillEllipse(12, 12, 3, 6); g.fillEllipse(20, 12, 3, 6); 
-                g.fillStyle(0xff5588, 1); g.fillCircle(6, 16, 3); g.fillCircle(26, 16, 3); 
-                g.generateTexture('kirby', 32, 32);
-
-                g.clear(); g.fillStyle(0xff8800, 1); g.fillCircle(16, 16, 16); g.fillStyle(0xffddaa, 1); g.fillCircle(16, 16, 10); g.fillStyle(0x000000, 1); g.fillCircle(12, 14, 2); g.fillCircle(20, 14, 2); g.generateTexture('enemy', 32, 32);
+                g.fillStyle(0xff8800, 1); g.fillCircle(16, 16, 16); g.fillStyle(0xffddaa, 1); g.fillCircle(16, 16, 10); g.fillStyle(0x000000, 1); g.fillCircle(12, 14, 2); g.fillCircle(20, 14, 2); g.generateTexture('enemy', 32, 32);
                 g.clear(); g.fillStyle(0x5500aa, 1); g.fillCircle(12, 12, 8); g.fillTriangle(4, 12, 0, 0, 12, 8); g.fillTriangle(20, 12, 24, 0, 12, 8); g.generateTexture('bat', 24, 24);
-
                 g.clear(); g.lineStyle(6, 0x55ffff, 0.8); g.beginPath(); g.arc(32, 32, 24, -Math.PI/2, Math.PI/2, false); g.strokePath(); g.generateTexture('sword', 64, 64);
                 g.clear(); g.lineStyle(8, 0x00ffcc, 0.9); g.beginPath(); g.arc(48, 48, 40, -Math.PI, Math.PI, false); g.strokePath(); g.generateTexture('evoSword', 96, 96);
-                
                 g.clear(); g.fillStyle(0xffff00, 1); g.lineStyle(2, 0xffaa00, 1); g.beginPath();
                 let cx = 12, cy = 13, rot = (Math.PI / 2) * 3, step = Math.PI / 5;
                 g.moveTo(cx, cy - 10); for (let i = 0; i < 5; i++) { g.lineTo(cx + Math.cos(rot) * 10, cy + Math.sin(rot) * 10); rot += step; g.lineTo(cx + Math.cos(rot) * 4, cy + Math.sin(rot) * 4); rot += step; }
                 g.closePath(); g.fillPath(); g.strokePath(); g.generateTexture('star', 24, 24);
-
                 g.clear(); g.fillStyle(0xff0000, 1); g.fillCircle(12, 14, 10); g.fillStyle(0x00ff00, 1); g.fillTriangle(12, 4, 6, 8, 18, 8); g.lineStyle(2, 0xffffff, 1); g.beginPath(); g.moveTo(8, 18); g.lineTo(8, 12); g.lineTo(12, 15); g.lineTo(16, 12); g.lineTo(16, 18); g.strokePath(); g.generateTexture('tomato', 24, 24);
-
                 g.clear(); g.fillStyle(0xff4400, 1); g.fillCircle(12, 12, 12); g.fillStyle(0xffff00, 1); g.fillCircle(12, 12, 8); g.generateTexture('fireball', 24, 24);
                 g.clear(); g.fillStyle(0x0088ff, 1); g.fillCircle(16, 16, 16); g.fillStyle(0x00ffff, 1); g.fillCircle(16, 16, 10); g.generateTexture('evoFire', 32, 32);
-
                 g.clear(); g.lineStyle(4, 0x00ffff, 0.6); g.strokeCircle(64, 64, 60); g.lineStyle(2, 0xffffff, 0.8); g.strokeCircle(64, 64, 64); g.generateTexture('sparkAura', 128, 128);
                 g.clear(); g.fillStyle(0xffaa00, 1); g.fillRect(4, 8, 24, 16); g.fillStyle(0xffff00, 1); g.fillRect(4, 4, 24, 6); g.lineStyle(2, 0xffffff, 1); g.strokeRect(4, 4, 24, 20); g.generateTexture('chest', 32, 32);
-
                 g.clear(); g.fillStyle(0xff0044, 1); g.fillCircle(10, 10, 8); g.generateTexture('heartFull', 20, 20);
                 g.clear(); g.fillStyle(0x333333, 1); g.fillCircle(10, 10, 8); g.generateTexture('heartEmpty', 20, 20);
                 g.clear(); g.lineStyle(3, 0xffffff, 0.4); g.strokeCircle(50, 50, 50); g.generateTexture('joyBase', 100, 100);
                 g.clear(); g.fillStyle(0xffffff, 0.6); g.fillCircle(25, 25, 25); g.generateTexture('joyThumb', 50, 50);
-
                 g.clear(); g.fillStyle(0xffff00, 1); g.lineStyle(4, 0xffaa00, 1); g.beginPath();
                 cx = 40; cy = 40; rot = (Math.PI / 2) * 3; step = Math.PI / 5;
                 g.moveTo(cx, cy - 35); for (let i = 0; i < 5; i++) { g.lineTo(cx + Math.cos(rot) * 35, cy + Math.sin(rot) * 35); rot += step; g.lineTo(cx + Math.cos(rot) * 15, cy + Math.sin(rot) * 15); rot += step; }
                 g.closePath(); g.fillPath(); g.strokePath(); g.generateTexture('giantStar', 80, 80);
-
                 g.clear(); g.fillStyle(0xffffff, 0.3); g.lineStyle(2, 0x00ffff, 0.5); g.beginPath(); g.moveTo(0, 50); g.lineTo(100, 0); g.lineTo(100, 100); g.closePath(); g.fillPath(); g.strokePath(); g.generateTexture('windCone', 100, 100);
                 g.clear(); g.fillStyle(0xffffff, 0.7); g.fillCircle(12, 12, 12); g.generateTexture('airPuff', 24, 24);
-
                 g.clear(); g.fillStyle(0x663300, 1); g.fillRect(0, 0, 40, 80); g.fillStyle(0xff0000, 1); g.fillCircle(20, 40, 8); g.generateTexture('wallEnemy', 40, 80);
                 g.clear(); g.fillStyle(0x333333, 1); g.fillCircle(20, 20, 20); g.fillStyle(0xff0000, 1); g.fillTriangle(20, 0, 10, 10, 30, 10); g.fillTriangle(20, 40, 10, 30, 30, 30); g.fillTriangle(0, 20, 10, 10, 10, 30); g.fillTriangle(40, 20, 30, 10, 30, 30); g.generateTexture('spikeEnemy', 40, 40);
                 g.clear(); g.fillStyle(0x0055ff, 1); g.fillCircle(60, 60, 60); g.fillStyle(0xffddaa, 1); g.fillCircle(60, 70, 40); g.fillStyle(0xcc0000, 1); g.fillRect(30, 10, 60, 20); g.fillStyle(0xffff00, 1); g.fillCircle(60, 20, 10); g.generateTexture('boss', 120, 120);
@@ -82,7 +73,10 @@
                 this.add.grid(w/2, h/2, w*2, h*2, 40, 40, 0x1a1c2e, 1, 0x2a2d4a, 0.5);
                 this.add.text(w/2, h * 0.3, 'KIRBY SURVIVOR', { fontSize: Math.min(48, w/8)+'px', fill: '#ff88bb', fontStyle: 'bold', align: 'center', wordWrap: {width: w*0.9} }).setOrigin(0.5);
                 this.add.text(w/2, h * 0.4, '星 之 卡 比  倖 存 者', { fontSize: '20px', fill: '#fff' }).setOrigin(0.5);
-                let hero = this.add.image(w/2, h * 0.55, 'kirby').setScale(3);
+                
+                // 首頁畫面也改為載入像素圖檔
+                let hero = this.add.image(w/2, h * 0.55, 'kirby_pixel').setScale(0.12);
+                
                 this.tweens.add({ targets: hero, y: hero.y - 20, yoyo: true, repeat: -1, duration: 600, ease: 'Sine.easeInOut' });
                 let startBtn = this.add.text(w/2, h * 0.8, '- 點 擊 螢 幕 開 始 -', { fontSize: '24px', fill: '#0f0', fontStyle: 'bold' }).setOrigin(0.5);
                 this.tweens.add({ targets: startBtn, alpha: 0.2, yoyo: true, repeat: -1, duration: 800 });
@@ -110,8 +104,17 @@
                 this.cameras.main.setBackgroundColor('#1a1c2e');
                 this.add.grid(GAME_CONFIG.worldSize/2, GAME_CONFIG.worldSize/2, GAME_CONFIG.worldSize, GAME_CONFIG.worldSize, 40, 40, 0x1a1c2e, 1, 0x2a2d4a, 0.5);
 
-                this.player = this.physics.add.sprite(GAME_CONFIG.worldSize/2, GAME_CONFIG.worldSize/2, 'kirby').setCollideWorldBounds(true).setDepth(10);
+                // ==========================================
+                // 遊戲主場景：使用像素圖產生玩家，並縮放尺寸
+                // ==========================================
+                this.player = this.physics.add.sprite(GAME_CONFIG.worldSize/2, GAME_CONFIG.worldSize/2, 'kirby_pixel').setDepth(10);
+                this.player.setScale(0.06); // 如果圖片太大或太小，請修改這個數值 (0.06 約為 1024縮至60像素)
+                
+                this.player.setCollideWorldBounds(true);
                 this.player.isInvincible = false; this.player.hp = GAME_CONFIG.playerMaxHP; this.player.level = 1; this.player.exp = 0; this.player.facing = 'right';
+                // 為了避免因縮放導致碰撞判定過大，重新設定物理碰撞框圓形大小
+                this.player.body.setCircle(this.player.width / 2.5);
+                this.player.body.setOffset((this.player.width - this.player.body.width) / 2, (this.player.height - this.player.body.height) / 2);
 
                 this.enemies = this.physics.add.group();
                 this.swords = this.physics.add.group();
@@ -163,6 +166,8 @@
                 this.cameras.main.startFollow(this.player);
                 this.scale.on('resize', this.resize, this);
             }
+
+            // ... (其餘原本設定的函數完全不變) ...
 
             setupUI() {
                 this.uiLayer = this.add.container(0, 0).setScrollFactor(0).setDepth(100);
@@ -221,7 +226,8 @@
 
             stopInhale() {
                 if (PLAYER_STATS.ultState !== 'INHALING') return;
-                this.isInhaling = false; this.windCone.setVisible(false); this.player.setScale(1); this.ultBtnBg.setScale(1);
+                // 恢復原本的縮放大小 0.06
+                this.isInhaling = false; this.windCone.setVisible(false); this.player.setScale(0.06); this.ultBtnBg.setScale(1);
                 if(this.inhaleLimitTimer) this.inhaleLimitTimer.remove();
 
                 let angle = this.windCone.rotation;
@@ -798,7 +804,8 @@
                                 if (d < 40) {
                                     this.eatenCount++;
                                     this.eatenExp += GAME_CONFIG.expPerStar;
-                                    this.player.setScale(1 + Math.min(this.eatenCount * 0.1, 0.5));
+                                    // 修正吸入膨脹的基數為 0.06
+                                    this.player.setScale(0.06 + Math.min(this.eatenCount * 0.01, 0.05));
                                     e.destroy(); 
                                     return;
                                 }
@@ -812,6 +819,7 @@
         
         new Phaser.Game({
             type: Phaser.AUTO, scale: { mode: Phaser.Scale.RESIZE, parent: 'game-container', width: '100%', height: '100%' },
+            pixelArt: true, // === 新增：確保像素圖在縮放時保持銳利邊緣不模糊 ===
             physics: { default: 'arcade', arcade: { gravity: { y: 0 } } }, scene: [StartScene, MainScene]
         });
     </script>
